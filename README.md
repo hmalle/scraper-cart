@@ -4,7 +4,9 @@
 ### A simple web scraping tool!
 ---
 #### Dependencies
-  nodejs
+```
+nodejs , npm , mongodb  
+```
 ---
 ### Usage
 ---
