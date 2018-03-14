@@ -9,7 +9,6 @@ nodejs , npm , mongodb
 ```
 ---
 ### Usage
----
 ```
   git clone "https://github.com/hmalle/scraper-cart"
   cd scraper-cart
