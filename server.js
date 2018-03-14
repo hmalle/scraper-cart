@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/scrapercart", {});
+mongoose.connect("mongodb://localhost/scrapercart");
 
 app.get("/scrape", function(req, res) {
   axios.get("https://www.nytimes.com").then(function(response) {
