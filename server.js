@@ -30,12 +30,14 @@ app.get("/scrape", function(req, res) {
       var result = {};
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
-      //create the article
-      db.Article.create(result).then(function(dbArticle){
-        console.log(dbArticle);
-      }).catch(function(err) {
-        return res.json(err);
-      });
+      //dont add links not containing sciencemag
+      if(result.link.indexOf("sciencemag")!== -1){
+        db.Article.create(result).then(function(dbArticle){
+          console.log(dbArticle);
+        }).catch(function(err) {
+          return res.json(err);
+        });
+      }
     });
     res.send("Scrape Complete");
   });
