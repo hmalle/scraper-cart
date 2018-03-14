@@ -17,12 +17,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/scrapercart");
+mongoose.connect("mongodb://127.0.0.1/scrapercart",function(err){
+  if(err){ 
+    console.log("Mongoose Connection Error: "+err);
+  }
+}),
 
 app.get("/scrape", function(req, res) {
-  axios.get("https://www.nytimes.com").then(function(response) {
+  axios.get("http://www.sciencemag.org/").then(function(response) {
     var $ = cheerio.load(response.data);
-    $("story-heading").each(function(i, element) {
+    $("h2.media__headline").each(function(i, element) {
       var result = {};
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
@@ -38,7 +42,7 @@ app.get("/scrape", function(req, res) {
 });
 
 app.get("/articles", function(req, res) {
-  db.Article.find({}).then(function(dbArticle) {
+  db.Article.find({}).then(function(dbArticle){
     res.json(dbArticle);
   }).catch(function(err) {
     res.json(err);
