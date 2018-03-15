@@ -28,7 +28,7 @@ body{
   margin-top: 10px;
 }
 .title-and-link{
-  width: 90%;
+  width: 80%;
   float:left;
 }
 .each-article{
@@ -44,7 +44,7 @@ body{
   width:10%;
 }
 
-.article-title, .article-link{
+.article-title, .article-link, .note-button, .delete-button{
   margin: 10px;
 }
 .article-title{
