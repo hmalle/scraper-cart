@@ -55,7 +55,6 @@ app.get("/articles", function(req, res) {
 app.get("/saved-articles", function(req, res) {
   db.Article.find({saved:true}).then(function(dbArticle){
     res.json(dbArticle);
-    console.log("Articles Rendered");
   }).catch(function(err) {
     res.json(err);
   });
@@ -70,6 +69,17 @@ app.get("/articles/:id", function(req, res) {
     res.json(err);
   });
 });
+
+//change the saved status of the article 
+app.post("/marksaved/:id/", function(req, res) {
+  db.Article.findOneAndUpdate({_id:req.params.id},{$set:{"saved":true}
+  }).then(function(dbArticle) {
+    res.json(dbArticle);
+  }).catch(function(err) {
+    res.json(err);
+  });
+});
+
 
 //save article
 app.post("/articles/:id", function(req, res) {

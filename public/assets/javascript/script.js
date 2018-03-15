@@ -1,8 +1,8 @@
 
 $(function(){
  
-  //when the page loads display all the articles from the database
   function allArticles(){
+    //to get all the articles
     $.getJSON("/articles", function(response) {
       $(".articles").empty();
       for (var i = 0; i < response.length; i++) {
@@ -15,7 +15,7 @@ $(function(){
           "</div>" 
         );
         var btn=$("<button>");
-        btn.data(response[i]._id);
+        btn.attr("data-id",response[i]._id);
         if(response[i].saved){ 
           btn.text("saved"); 
           btn.addClass("btn save-button");
@@ -32,6 +32,7 @@ $(function(){
   allArticles();
 
   $(".saved-articles-button").on("click", function(){
+    //get all saved articles
     $.getJSON("/saved-articles", function(response) {
       $(".articles").empty();
       for (var i = 0; i < response.length; i++) {
@@ -45,13 +46,6 @@ $(function(){
             "<button class='btn btn-danger delete-button' data-id='"+response[i]._id+"'>Delete</p>"+
           "</div>"
         );
-        var btn=$("<button>");
-        btn.text("saved"); 
-        btn.addClass("btn save-button");
-        btn.text("save article");
-        btn.addClass("btn save-button");
-        article.append(btn);
-        $(".articles").append(article);
       }
     });
   });
@@ -67,18 +61,19 @@ $(function(){
     });
   });
 
-  $(document).on("click",".saved-articles-button", function(){
-    var articleId = $(this).attr("data-id");
+  $(document).on("click",".save-button", function(){
+    //mark an article as saved
+    var id = $(this).attr("data-id");
     $.ajax({
       method: "POST",
-      url: "/articles/"+articleId
+      url: "/marksaved/"+id
     }).then(function(response){
       console.log(response);
     });
   });
 
   $(document).on("click", "p", function() {
-    //when an article is clicked
+    //when an article is clicked get its infomation
     $("#notes").empty();
     var thisId = $(this).attr("data-id");
     $.ajax({
