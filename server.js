@@ -30,6 +30,7 @@ app.get("/scrape", function(req, res) {
       var result = {};
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
+      result.saved = false;
       //dont add links not containing sciencemag
       if(result.link.indexOf("sciencemag")!== -1){
         db.Article.create(result).then(function(dbArticle){
