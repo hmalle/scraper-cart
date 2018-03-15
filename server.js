@@ -30,7 +30,6 @@ app.get("/scrape", function(req, res) {
       var result = {};
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
-      result.saved = false;
       //dont add links not containing sciencemag
       if(result.link.indexOf("sciencemag")!== -1){
         db.Article.create(result).then(function(dbArticle){
@@ -47,10 +46,21 @@ app.get("/scrape", function(req, res) {
 app.get("/articles", function(req, res) {
   db.Article.find({}).then(function(dbArticle){
     res.json(dbArticle);
+    console.log("Articles Rendered");
   }).catch(function(err) {
     res.json(err);
   });
 });
+
+app.get("/saved-articles", function(req, res) {
+  db.Article.find({saved:true}).then(function(dbArticle){
+    res.json(dbArticle);
+    console.log("Articles Rendered");
+  }).catch(function(err) {
+    res.json(err);
+  });
+});
+
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {

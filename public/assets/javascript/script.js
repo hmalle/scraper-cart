@@ -2,33 +2,78 @@
 $(function(){
  
   //when the page loads display all the articles from the database
-  $.getJSON("/articles", function(data) {
-    for (var i = 0; i < data.length; i++) {
-      var article = ("<div>");
-      article.addClass("each-article");
-      article.append(
-        "<p class='article-title' data-id='" + data[i]._id + "'>" + data[i].title + "</p>" + 
-        "<p class='article-link'><a href=" + data[i].link +">"+  data[i].link + "</a></p>" +
-      );
-      var btn=$("<button>");
-      btn.addClass("save");
-      if(data[i].saved){ 
-        btn.attr("text","saved"); 
-      }else{
-        btn.attr("text","save article");
+  function allArticles(){
+    $.getJSON("/articles", function(response) {
+      $(".articles").empty();
+      for (var i = 0; i < response.length; i++) {
+        var article = $("<div>");
+        article.addClass("each-article");
+        article.append(
+          "<div class='title-and-link'>"+
+            "<p class='article-title' data-id='" + response[i]._id + "'>" + response[i].title + "</p>"+ 
+            "<p class='article-link'><a href=" + response[i].link +">"+  response[i].link + "</a></p>"+
+          "</div>" 
+        );
+        var btn=$("<button>");
+        btn.data(response[i]._id);
+        if(response[i].saved){ 
+          btn.text("saved"); 
+          btn.addClass("btn save-button");
+        }else{
+          btn.text("save article");
+          btn.addClass("btn save-button");
+        }
+        article.append(btn);
+        $(".articles").append(article);
       }
-      $(".articles").append(article);
-    }
+    });
+  }
+
+  allArticles();
+
+  $(".saved-articles-button").on("click", function(){
+    $.getJSON("/saved-articles", function(response) {
+      $(".articles").empty();
+      for (var i = 0; i < response.length; i++) {
+        $(".articles").append(
+          "<div class='each-article'>"+
+            "<div class='title-and-link'>"+
+              "<p class='article-title' data-id='" + response[i]._id + "'>" + response[i].title + "</p>"+ 
+              "<p class='article-link'><a href=" + response[i].link +">"+  response[i].link + "</a></p>"+
+            "</div>"+
+            "<button class='btn btn-info note-button' data-id='"+response[i]._id+"'>Note</p>"+
+            "<button class='btn btn-danger delete-button' data-id='"+response[i]._id+"'>Delete</p>"+
+          "</div>"
+        );
+        var btn=$("<button>");
+        btn.text("saved"); 
+        btn.addClass("btn save-button");
+        btn.text("save article");
+        btn.addClass("btn save-button");
+        article.append(btn);
+        $(".articles").append(article);
+      }
+    });
   });
 
-  $(document).on("click","#scrape",function(){
+  $(document).on("click",".scrape-button",function(){
     //when the get new articles is clicked
     $.ajax({
       method:"GET",
       url: "/scrape"
-    }).then(function(data){
-      console.log(data);
-      document.location.reload();
+    }).then(function(response){
+      console.log(response);
+      allArticles();
+    });
+  });
+
+  $(document).on("click",".saved-articles-button", function(){
+    var articleId = $(this).attr("data-id");
+    $.ajax({
+      method: "POST",
+      url: "/articles/"+articleId
+    }).then(function(response){
+      console.log(response);
     });
   });
 
@@ -39,15 +84,15 @@ $(function(){
     $.ajax({
       method: "GET",
       url: "/articles/" + thisId
-    }).then(function(data) {
-      console.log(data);
-      $("#notes").append("<h2>" + data.title + "</h2>");
+    }).then(function(response){
+      console.log(response);
+      $("#notes").append("<h2>" + response.title + "</h2>");
       $("#notes").append("<input id='titleinput' name='title' >");
       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-      $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-      if (data.note) {
-        $("#titleinput").val(data.note.title);
-        $("#bodyinput").val(data.note.body);
+      $("#notes").append("<button data-id='" + response._id + "' id='savenote'>Save Note</button>");
+      if (response.note) {
+        $("#titleinput").val(response.note.title);
+        $("#bodyinput").val(response.note.body);
       }
     });
   });
@@ -62,8 +107,8 @@ $(function(){
         title: $("#titleinput").val(),
         body: $("#bodyinput").val()
       }
-    }).then(function(data) {
-        console.log(data);
+    }).then(function(response) {
+        console.log(response);
         $("#notes").empty();
       });
     $("#titleinput").val("");

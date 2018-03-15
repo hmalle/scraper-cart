@@ -16,8 +16,8 @@ body{
   padding: 5px;
 }
 
-.scrape-button{
-  
+.scrape-button, .saved-articles-button{
+  margin: 0px 2px;
 }
 
 .articles{
@@ -27,10 +27,21 @@ body{
   padding:5px;
   margin-top: 10px;
 }
+.title-and-link{
+  width: 90%;
+  float:left;
+}
 .each-article{
+  overflow: auto;
   border: 1px solid #535353;
   border-radius: 3px;
+  margin-top: 6px;
   width: 100%;
+}
+
+.save-button{
+  float:left;
+  width:10%;
 }
 
 .article-title, .article-link{
