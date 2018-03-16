@@ -67,15 +67,6 @@ app.get("/saved-articles", function(req, res) {
   });
 });
 
-// Route for grabbing a specific Article by id, populate it with it's note
-app.get("/articles/:id", function(req, res) {
-  db.Article.findOne({ _id: req.params.id }).populate("note").then(function(dbArticle){
-    res.json(dbArticle);
-  }).catch(function(err) {
-    res.json(err);
-  });
-});
-
 //change the saved status of the article 
 app.put("/marksaved/:id/", function(req, res) {
   db.Article.findOneAndUpdate({_id:req.params.id},{$set:{"saved":true}}
@@ -96,9 +87,18 @@ app.put("/markunsaved/:id/", function(req, res) {
   });
 });
 
-//save article
-app.post("/articles/:id", function(req, res) {
-  db.Note.create(req.body).then(function(dbNote) {
+// Route for grabbing a specific Article by id, populate it with it's note
+app.get("/article-notes/:id", function(req, res) {
+  db.Article.findOne({ _id: req.params.id }).populate("note").then(function(dbArticle){
+    res.json(dbArticle);
+  }).catch(function(err) {
+    res.json(err);
+  });
+});
+
+//save notes
+app.post("/save-note/:id/:note", function(req, res) {
+  db.Note.create(req.params.note).then(function(dbNote) {
     return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
   }).then(function(dbArticle) {
     res.json(dbArticle);

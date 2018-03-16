@@ -12,7 +12,11 @@ $(function(){
   }
 
   allArticles();
-  
+
+  $(document).on("click",".articles-button", function(){
+    allArticles();
+  });
+
   $(document).on("click", ".saved-articles-button", function(){
     //get all saved articles
     $.ajax("/saved-articles",{
@@ -55,43 +59,30 @@ $(function(){
     });
   });
 
-  $(document).on("click", "notes-save", function() {
-    //when an article is clicked get its infomation
-    $("#notes").empty();
-    var thisId = $(this).attr("data-id");
-    $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
-    }).then(function(response){
-      console.log(response);
-      $("#notes").append("<h2>" + response.title + "</h2>");
-      $("#notes").append("<input id='titleinput' name='title' >");
-      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-      $("#notes").append("<button data-id='" + response._id + "' id='savenote'>Save Note</button>");
-      if (response.note) {
-        $("#titleinput").val(response.note.title);
-        $("#bodyinput").val(response.note.body);
-      }
-    });
-  });
-
   //////////////////functionality to save note and delete notes///////////////////////////////
   var currentArticleId;
   $(document).on("click",".notes-button", function(){
-    $(".notes-modal").modal("toggle");
     currentArticleId = $(this).attr("data-id");
+    $(".notes-modal").modal("toggle");
+    $.ajax({
+      method:"GET",
+      url: "saved-articles/"+ currentArticleId
+    }).then(function(response){
+      $(".modal-notes-section").empty();
+      $(".modal-notes-section").append(
+        
+      );
+    });
   });
 
   // When you click the savenote button
-  $(document).on("click", ".savenote", function() {
-    var thisId = curentArticleId;
-    var articleNotes = $(".articleNotes").val();
-    $(".article-notes").val("");
+  $(document).on("click", ".save-note-button", function() {
+    var thisId = currentArticleId;
+    var articleNotes = $(".article-note").val();
+    $(".article-note").val("");
     $.ajax({
       method: "POST",
-      url: "/articles/" + thisId,
-      data: articleNotes
-      }
+      url: "/save-note/" + thisId+"/"+articleNotes
     }).then(function(response) {
         console.log(response);
     });
