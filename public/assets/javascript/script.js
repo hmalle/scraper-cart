@@ -66,9 +66,9 @@ $(function(){
     $(".notes-modal").modal("toggle");
     $.ajax({
       method:"GET",
-      url: "saved-articles/"+ currentArticleId
+      url: "/article-notes/"+ currentArticleId
     }).then(function(response){
-      $(".modal-notes-section").empty();
+      if(response.note){ $(".modal-notes-section").empty(); }
       $(".modal-notes-section").append(
         
       );
