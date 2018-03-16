@@ -16,3 +16,7 @@ nodejs , npm , mongodb
   node server.js
 ```
 ---
+![Alt text](./imgs/articles.png)
+![Alt text](./imgs/saved-articles.png)
+![Alt text](./imgs/article-notes.png)
+
