@@ -21,7 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://127.0.0.1/scrapercart",function(err){
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1/scrapercart" ;
+mongoose.connect(MONGODB_URI,function(err){
   if(err){ 
     console.log("Mongoose Connection Error: "+err);
   }
