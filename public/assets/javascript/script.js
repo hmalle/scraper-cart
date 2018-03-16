@@ -70,12 +70,14 @@ $(function(){
     }).then(function(response){
       if(response.note){ $(".modal-notes-section").empty(); }
       $(".modal-notes-section").append(
-        
+        //TODO: Get all notes and append them to the notes section
       );
     });
   });
 
-  // When you click the savenote button
+  // When you click the savenote button 
+  // TODO: Get this to save the notes
+  // TODO: refresh the modal with the new notes
   $(document).on("click", ".save-note-button", function() {
     var thisId = currentArticleId;
     var articleNotes = $(".article-note").val();

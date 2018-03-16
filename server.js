@@ -98,7 +98,7 @@ app.get("/article-notes/:id", function(req, res) {
 
 //save notes
 app.post("/save-note/:id/:note", function(req, res) {
-  db.Note.create(req.params.note).then(function(dbNote) {
+  db.Note.create({body:req.params.note}).then(function(dbNote) {
     return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
   }).then(function(dbArticle) {
     res.json(dbArticle);
