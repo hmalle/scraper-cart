@@ -9,7 +9,7 @@ var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("./models");
 
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 3001;
 var app = express();
 
 app.engine("handlebars", exphbs({defaultLayout: "main"}));
@@ -99,7 +99,7 @@ app.get("/article-notes/:id", function(req, res) {
 //save notes
 app.post("/save-note/:id/:note", function(req, res) {
   db.Note.create({body:req.params.note}).then(function(dbNote) {
-    return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+    return db.Article.findOneAndUpdate({_id: req.params.id},{note:dbNote._id }, { new: true });
   }).then(function(dbArticle) {
     res.json(dbArticle);
   }).catch(function(err) {

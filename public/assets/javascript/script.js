@@ -61,23 +61,30 @@ $(function(){
 
   //////////////////functionality to save note and delete notes///////////////////////////////
   var currentArticleId;
-  $(document).on("click",".notes-button", function(){
-    currentArticleId = $(this).attr("data-id");
-    $(".notes-modal").modal("toggle");
+  
+  function getArticleNotes(currentArticleId){
+    //place the notes on the modal-notes-section
     $.ajax({
       method:"GET",
       url: "/article-notes/"+ currentArticleId
     }).then(function(response){
-      if(response.note){ $(".modal-notes-section").empty(); }
-      $(".modal-notes-section").append(
-        //TODO: Get all notes and append them to the notes section
-      );
+      console.log(response.note);
+      if(response.note){ 
+        $(".modal-notes-section").empty();
+        $(".modal-notes-section").append(
+          "<div class='article-notes'>"+response.note.body+"</div>"
+        );
+      }
     });
+  }
+
+  $(document).on("click",".notes-button", function(){
+    currentArticleId = $(this).attr("data-id");
+    $(".notes-modal").modal("toggle");
+    getArticleNotes(currentArticleId);
   });
 
   // When you click the savenote button 
-  // TODO: Get this to save the notes
-  // TODO: refresh the modal with the new notes
   $(document).on("click", ".save-note-button", function() {
     var thisId = currentArticleId;
     var articleNotes = $(".article-note").val();
@@ -85,8 +92,8 @@ $(function(){
     $.ajax({
       method: "POST",
       url: "/save-note/" + thisId+"/"+articleNotes
-    }).then(function(response) {
-        console.log(response);
+    }).then(function(response){
+      getArticleNotes(articleId);
     });
   });
 
