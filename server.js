@@ -95,8 +95,6 @@ app.put("/markunsaved/:id/", function(req, res) {
   });
 });
 
-
-
 //save article
 app.post("/articles/:id", function(req, res) {
   db.Note.create(req.body).then(function(dbNote) {

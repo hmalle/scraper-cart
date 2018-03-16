@@ -76,26 +76,25 @@ $(function(){
   });
 
   //////////////////functionality to save note and delete notes///////////////////////////////
+  var currentArticleId;
   $(document).on("click",".notes-button", function(){
     $(".notes-modal").modal("toggle");
+    currentArticleId = $(this).attr("data-id");
   });
 
   // When you click the savenote button
-  $(document).on("click", "#savenote", function() {
-    var thisId = $(this).attr("data-id");
+  $(document).on("click", ".savenote", function() {
+    var thisId = curentArticleId;
+    var articleNotes = $(".articleNotes").val();
+    $(".article-notes").val("");
     $.ajax({
       method: "POST",
       url: "/articles/" + thisId,
-      data: {
-        title: $("#titleinput").val(),
-        body: $("#bodyinput").val()
+      data: articleNotes
       }
     }).then(function(response) {
         console.log(response);
-        $("#notes").empty();
-      });
-    $("#titleinput").val("");
-    $("#bodyinput").val("");
+    });
   });
 
 });
