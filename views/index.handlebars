@@ -1,0 +1,14 @@
+
+{{#each articles}}
+  <div class="each-article">
+    <div class="title-and-link">
+      <p class="article-title" data-id="{{this._id}}">{{this.title}}</p>
+      <p class="article-link"><a href="{{this.link}}">{{this.link}}</a></p>
+    </div>
+    {{#if this.saved}}
+      <button class="btn btn-sucess" data-id="{{this._id}}">Saved</button>
+    {{else}}
+      <button class="btn save-button" data-id="{{this._id}}">save article</button>
+    {{/if}}
+  </div>
+{{/each}}

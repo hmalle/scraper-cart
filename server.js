@@ -1,5 +1,6 @@
 
 var express = require("express");
+var exphbs = require("express-handlebars");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
@@ -10,6 +11,9 @@ var db = require("./models");
 
 var PORT = 3000;
 var app = express();
+
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
+app.set("view engine", "handlebars");
 
 //middleware
 app.use(logger("dev"));
@@ -31,22 +35,24 @@ app.get("/scrape", function(req, res) {
       result.title = $(this).children("a").text();
       result.link = $(this).children("a").attr("href");
       //dont add links not containing sciencemag
-      if(result.link.indexOf("sciencemag")!== -1){
+      if(result.link && result.link.indexOf("sciencemag")!== -1){
         db.Article.create(result).then(function(dbArticle){
-          console.log(dbArticle);
         }).catch(function(err) {
           return res.json(err);
         });
       }
     });
-    res.send("Scrape Complete");
+    res.redirect("/articles");
   });
+});
+
+app.get("/", function(req, res){
+  res.redirect("/articles");
 });
 
 app.get("/articles", function(req, res) {
   db.Article.find({}).then(function(dbArticle){
-    res.json(dbArticle);
-    console.log("Articles Rendered");
+    res.render("index",{articles: dbArticle});
   }).catch(function(err) {
     res.json(err);
   });
@@ -54,12 +60,11 @@ app.get("/articles", function(req, res) {
 
 app.get("/saved-articles", function(req, res) {
   db.Article.find({saved:true}).then(function(dbArticle){
-    res.json(dbArticle);
+    res.render("saved-articles",{articles: dbArticle});
   }).catch(function(err) {
     res.json(err);
   });
 });
-
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
@@ -71,14 +76,25 @@ app.get("/articles/:id", function(req, res) {
 });
 
 //change the saved status of the article 
-app.post("/marksaved/:id/", function(req, res) {
-  db.Article.findOneAndUpdate({_id:req.params.id},{$set:{"saved":true}
+app.put("/marksaved/:id/", function(req, res) {
+  db.Article.findOneAndUpdate({_id:req.params.id},{$set:{"saved":true}}
+  ).then(function(dbArticle) {
+    res.json(dbArticle);
+  }).catch(function(err) {
+    res.json(err);
+  });
+});
+
+//change the saved status of the article 
+app.put("/markunsaved/:id/", function(req, res) {
+  db.Article.findOneAndUpdate({_id:req.params.id},{$set:{"saved":false}
   }).then(function(dbArticle) {
     res.json(dbArticle);
   }).catch(function(err) {
     res.json(err);
   });
 });
+
 
 
 //save article

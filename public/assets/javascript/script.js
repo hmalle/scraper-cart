@@ -3,60 +3,31 @@ $(function(){
  
   function allArticles(){
     //to get all the articles
-    $.getJSON("/articles", function(response) {
-      $(".articles").empty();
-      for (var i = 0; i < response.length; i++) {
-        var article = $("<div>");
-        article.addClass("each-article");
-        article.append(
-          "<div class='title-and-link'>"+
-            "<p class='article-title' data-id='" + response[i]._id + "'>" + response[i].title + "</p>"+ 
-            "<p class='article-link'><a href=" + response[i].link +">"+  response[i].link + "</a></p>"+
-          "</div>" 
-        );
-        var btn=$("<button>");
-        btn.attr("data-id",response[i]._id);
-        if(response[i].saved){ 
-          btn.text("saved"); 
-          btn.addClass("btn save-button");
-        }else{
-          btn.text("save article");
-          btn.addClass("btn save-button");
-        }
-        article.append(btn);
-        $(".articles").append(article);
-      }
+    $.ajax("/articles",{
+      type:"GET"
+    }).then(function(resp) {
+      document.html(data);
+      console.log("got the articles")
     });
   }
 
   allArticles();
-
-  $(".saved-articles-button").on("click", function(){
+  
+  $(document).on("click", ".saved-articles-button", function(){
     //get all saved articles
-    $.getJSON("/saved-articles", function(response) {
-      $(".articles").empty();
-      for (var i = 0; i < response.length; i++) {
-        $(".articles").append(
-          "<div class='each-article'>"+
-            "<div class='title-and-link'>"+
-              "<p class='article-title' data-id='" + response[i]._id + "'>" + response[i].title + "</p>"+ 
-              "<p class='article-link'><a href=" + response[i].link +">"+  response[i].link + "</a></p>"+
-            "</div>"+
-            "<button class='btn btn-info note-button' data-id='"+response[i]._id+"'>Note</p>"+
-            "<button class='btn btn-danger delete-button' data-id='"+response[i]._id+"'>Delete</p>"+
-          "</div>"
-        );
+    $.ajax("/saved-articles",{
+        type:"GET"
+    }).then(function() {
+      console.log("got the saved articles");
       }
-    });
+    );
   });
 
   $(document).on("click",".scrape-button",function(){
     //when the get new articles is clicked
-    $.ajax({
-      method:"GET",
-      url: "/scrape"
-    }).then(function(response){
-      console.log(response);
+    $.ajax("/scrape",{
+      type:"GET",
+    }).then(function(){
       allArticles();
     });
   });
@@ -65,14 +36,26 @@ $(function(){
     //mark an article as saved
     var id = $(this).attr("data-id");
     $.ajax({
-      method: "POST",
+      method: "PUT",
       url: "/marksaved/"+id
-    }).then(function(response){
-      console.log(response);
+    }).then(function(){
+      location.href="/articles";
+      console.log("article saved successifully");
     });
   });
 
-  $(document).on("click", "p", function() {
+  $(document).on("click",".delete-button",function(){
+    var id=$(".delete-button").attr("data-id");
+    $.ajax({
+      method:"PUT",
+      url: "/markunsaved/"+id
+    }).then(function(){
+      location.href="/saved-articles";
+      console.log("this doesnt even get console logged");
+    });
+  });
+
+  $(document).on("click", "notes-save", function() {
     //when an article is clicked get its infomation
     $("#notes").empty();
     var thisId = $(this).attr("data-id");
@@ -90,6 +73,11 @@ $(function(){
         $("#bodyinput").val(response.note.body);
       }
     });
+  });
+
+  //////////////////functionality to save note and delete notes///////////////////////////////
+  $(document).on("click",".notes-button", function(){
+    $(".notes-modal").modal("toggle");
   });
 
   // When you click the savenote button
