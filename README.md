@@ -2,9 +2,11 @@
 # scraper-cart
 ---
 ### A simple web scraping tool!
-  This is a simple web scraper that scrapes science articles and saves them in to a Mongo Database
-  It is written in javascript and uses express and handlebars
-    Deployed Link : scrapercart.herokuapp.com
+
+This is a simple web scraper that scrapes science articles and saves them in to a Mongo Database
+It is written in javascript and uses express and handlebars
+Deployed Link : scrapercart.herokuapp.com
+
 ---
 #### Dependencies
 ```
