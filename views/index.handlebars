@@ -6,9 +6,9 @@
       <p class="article-link"><a href="{{this.link}}">{{this.link}}</a></p>
     </div>
     {{#if this.saved}}
-      <button class="btn btn-sucess" data-id="{{this._id}}">Saved</button>
+      <button class="btn btn-sucess save_saved" data-id="{{this._id}}">Saved</button>
     {{else}}
-      <button class="btn save-button" data-id="{{this._id}}">save article</button>
+      <button class="btn save-button save_saved" data-id="{{this._id}}">save article</button>
     {{/if}}
   </div>
 {{/each}}

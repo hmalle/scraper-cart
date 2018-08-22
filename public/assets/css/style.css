@@ -6,7 +6,6 @@ body{
   font-family: 'Cagliostro', sans-serif;
   font-family: 'Play', sans-serif;
 }
-
 .heading{
   background-color: #404040;
   border: 1px solid #404040;
@@ -15,11 +14,9 @@ body{
   margin-top: 10px;
   padding: 5px;
 }
-
 .scrape-button, .saved-articles-button{
   margin: 0px 2px;
 }
-
 .articles{
   background-color: #404040;
   border: 1px solid #404040;
@@ -37,16 +34,15 @@ body{
   border-radius: 3px;
   margin-top: 6px;
   width: 100%;
-}
-
-.save-button{
-  float:left;
-  width:10%;
-}
-
+} 
 .saved{
   float:left;
   width:10%;
+}
+.save_saved{
+  float: left;
+  min-width: 123px;
+  margin-top: 5px;
 }
 .article-title, .article-link, .note-button, .delete-button{
   margin: 10px;
@@ -54,11 +50,9 @@ body{
 .article-title{
   font-weight: 600;
 }
-
 .article-link{
   height: 20px;
 }
-
 .notes-modal{
   color: #000;
 }
